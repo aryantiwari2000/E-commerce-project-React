@@ -7,9 +7,15 @@ import SignUp from "./pages/SignUP/SignUp"
 import { useState } from "react"
 import Navbar from "./Components/Navbar/Navbar"
 import Footer from "./Components/Footer/Footer"
+import { Toaster } from "react-hot-toast"
 
 
 function App() {
+
+  const [cart,setCart]=useState([])
+  const[promoCode, setPromoCode]=useState("")
+  const[discount, setDiscount]=useState(0)
+  const[invalid,setInvalid]=useState("Invalid PromoCode")
 
 // handle Increase
 
@@ -42,7 +48,7 @@ const handleDec = (id)=>{
 
   };
 
-  const [cart,setCart]=useState([])
+
 
   //Add to cart 
 
@@ -62,6 +68,32 @@ const handleDec = (id)=>{
 
   }
 
+  //calculte total price
+
+  const getTotalPrice =()=>{
+
+    const totalPrice=cart.reduce((total,cartReduceItem)=>{
+    
+      return total + cartReduceItem.price*cartReduceItem.quantity
+
+    },0)
+
+    return totalPrice-discount;
+  }
+
+  //Promocode
+  const applyPromoCode =()=>{
+    if(promoCode==="DISCOUNT10"){
+  
+      setDiscount(getTotalPrice()*0.1)
+      setPromoCode("")
+    }
+    else{
+      setInvalid(invalid)
+    }
+  
+  }
+
   return (
     <>
 
@@ -69,13 +101,14 @@ const handleDec = (id)=>{
     <Navbar cart={cart}/>
     <Routes>
      <Route path="/" element={<Home/>}/>
-     <Route path="/cart" element={<Cart cart={cart} handleDec={handleDec} handleInc={handleInc} handleRemove={handleRemove}/>}/>
+     <Route path="/cart" element={<Cart cart={cart} handleDec={handleDec} handleInc={handleInc} handleRemove={handleRemove} getTotalPrice={getTotalPrice} applyPromoCode={applyPromoCode} promoCode={promoCode} setPromoCode={setPromoCode} invalid={invalid}/>}/>
      <Route path="/allproducts" element={<AllProducts AddToCart={AddToCart} />}/>
      <Route path="/login" element={<Login/>}/>
      <Route path="/signUp" element={<SignUp/>}/>
 
 
      </Routes>
+     <Toaster/>
     <Footer/>
      </BrowserRouter>
     </>
