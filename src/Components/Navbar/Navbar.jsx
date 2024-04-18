@@ -5,7 +5,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { RxCross1 } from "react-icons/rx";
 
 
-const Navbar = ({cart}) => {
+const Navbar = ({cart , userName}) => {
 
   const[isOpen,setIsOpen]=useState(false)
 
@@ -68,6 +68,8 @@ const Togglechange=()=>{
           <Link to='/login'>
           <button className=' inline-flex bg-gray-100 px-3 py-1 hover:bg-gray-200 rounded text-base mt-4 md:mt-0 focus:out '>Login</button>
           </Link>
+
+          <span>{userName}</span>
           <Link to='/cart'>
                 <span>{cart.length}</span>
           <button><FaCartArrowDown size={25} /></button>

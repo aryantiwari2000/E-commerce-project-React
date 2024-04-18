@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import img3 from '../../assets/Gallary/img3.jpg'
 import toast from 'react-hot-toast'
 import { auth } from '../../FirebaseAuth/FirebaseAuth'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 
 
 
 
 const SignUp = () => {
+
+  const navigateLogin= useNavigate();
 
 
   const[userSignup,setUserSignup]=useState({username:"", email:"",password:""})
@@ -28,8 +31,18 @@ const SignUp = () => {
     }
     else{
       createUserWithEmailAndPassword (auth, userSignup.email, userSignup.password)
-    .then((res) => {const user = res.user})
+
+    .then(async (res) => {const user = res.user
+    
+     await updateProfile(user,{displayName:userSignup.username})
+
+     navigateLogin('/login')
+    
+    
+    })
     .catch((err) =>toast.error(err.message) );
+
+
     }
   }
   return (
