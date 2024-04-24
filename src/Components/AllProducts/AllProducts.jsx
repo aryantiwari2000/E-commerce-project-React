@@ -11,10 +11,11 @@ const AllProducts = ({AddToCart}) => {
   const[selectProducts,setSelectProducts]=useState("")
   const[originalProducts,SetOriginalProducts]=useState([])
 
+  const [searchItem, setSearchItem]=useState("")
+  const[minPrice, setMinPrice]= useState("")
+  const[maxPrice, setMaxPrice]= useState("")
 
-  // use for true false
-    // const[product,setProducts]=useState([])
-  // const[showProducts,setShowProducts]=useState(false)
+
 
   useEffect(()=>{
 
@@ -45,43 +46,43 @@ useEffect(() => {
   getAllProductCatagory();
   },[])
 
-      //sigle products
-
-
-  // useEffect(() => {
-
-
-  //   const getAllProducts = async()=>{
-  //     try{
-  //       if(selectProducts){
-  //         const res= await axios(`https://dummyjson.com/products/category/${selectProducts}`)
-  //         setProducts(res.data.products);
-  //       }
-        
-  //     }catch(error){
-  //       console.log(error)
-  //     }
-  //   };
-  //   getAllProducts();
-  //   },[selectProducts])
-
-
-
-    // const filterAllProducts=(allProducts)=>{
-    //   setSelectProducts(allProducts);
-    //   // setShowProducts(true)
-    //  }
+   
 
     const filterAllProducts=(selectcategory)=>{
     setSelectProducts(selectcategory);
-
-      // const data = allProducts.filter((filterItems) => filterItems.category === selectcategory)
-      // setAllProducts(data)
 
       const data = selectcategory? originalProducts.filter((filterItems) => filterItems.category === selectcategory) :
       originalProducts
       setAllProducts(data)
      };
+
+     //search Products
+     const handleSearchItem=()=>{
+      const searchProduct= originalProducts.filter((searchFilterItems)=>{
+        searchFilterItems.title.toLowerCase().includes(searchItem.toLowerCase())
+  
+  
+       })
+       setAllProducts(searchProduct);
+
+
+
+     }
+
+     //Price Filter
+
+     const handlePrice=()=>{
+
+      let min = parseFloat(minPrice)
+      let max = parseFloat(maxPrice)
+
+      const filterPrice=originalProducts.filter((priceItem)=>{
+        (!min || priceItem.price>=min) && (!min ||priceItem.price<=max)
+      })
+      setAllProducts(filterPrice);
+
+
+     }
 
   return (
     <>
@@ -94,60 +95,47 @@ useEffect(() => {
     
          {/* Catagory */}
         <div className='flex gap-3 flex-wrap'>
-          <select onClick={(e)=>filterAllProducts(e.target.value)}>
+          <select onChange={(e)=>filterAllProducts(e.target.value)}>
             <option>Filter By Catagory</option>
           {allCategory.filter((filterItem)=>!["lighting","motorcycle","automotive","furniture"].includes(filterItem))
-
-
-            .map((item,index)=>(
-              <option value={item}>
-              {/* <button className='bordor bg-black text-white px-2 py-2 mt-5' onClick={()=>filterAllProducts(allProducts)}>{allProducts}</button> */}
+              .map((item,index)=>(
+              <option value={item} key={index}>
                {item}
             </option>
             ))
           }
         </select>
         </div>
-
-
-        {/* Single Products */}
-        {/* {        
-        
-        showProducts?  <div className=' flex gap-3 mt-3'>
-        {product.map((item)=>(
-          <div className='border-4'>
-            <img src={item.thumbnail} alt="" />
-            <p>{item.title}</p>
-            <p>{item.price}</p>
-            <p>{item.rating}</p>
-          </div>
-        ))
-        } */}
-                  {/* All Products */}
-
-      {/* </div>:<div className=' flex gap-3 mt-3 flex-wrap'>
-          {
-           allProducts.map((AllItems,index)=>(
-            <div className='border-4' key={index}>
-                <img src={AllItems.thumbnail} alt="" />
-              <p>{AllItems.title}</p>
-              <p>{AllItems.price}</p>
-              <p>{AllItems.rating}</p>
-            </div>
-           ))
-
-          }
+       {/* search item */}
+        <div className='text-center mt-3 text-2xl'>
+          <input placeholder='search item' className='bordor-4 px-2 py-2' onChange={(e)=>setSearchItem(e.target.value)} value={searchItem} />
+          <button className='bg-black text-white px-2 py-2 ml-4 rounded-md' onClick={handleSearchItem}>Search Products</button>
         </div>
+         {/* product filter by price */}
+        <div className='text-center mt-3'>
+          <input
+           placeholder='min price' 
+           className='bordor-4 px-2 py-2 ml-3' 
+           onChange={(e)=>setMinPrice(e.target.value)} 
+           value={minPrice} />
 
-
-        } */}
-
+          <input
+           placeholder='max price' 
+           className='bordor-4 px-2 py-2 ml-3' 
+           onChange={(e)=>setMaxPrice(e.target.value)} 
+           value={maxPrice} /> 
+            <button 
+            className='bg-black text-white px-2 py-2 ml-4 rounded-md' 
+            onClick={handlePrice}>Filter by Price</button>
+         
+        </div>
+         
          {/* All Products */}
 
         <div className=' flex gap-3 mt-3 flex-wrap'>
           {
-           allProducts.map((AllItems,index)=>(
-            <div className='border-4' key={index}>
+           allProducts.map((AllItems)=>(
+            <div className='border-4' key={AllItems.id}>
                 <img src={AllItems.thumbnail} alt="" />
 
               <p>{AllItems.title}</p>
