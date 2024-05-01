@@ -10,10 +10,7 @@ import Footer from "./Components/Footer/Footer"
 import { Toaster } from "react-hot-toast"
 import { onAuthStateChanged} from "firebase/auth"
 import { auth } from "./FirebaseAuth/FirebaseAuth"
-
-
-
-
+import SingleProduct from "./pages/SingleProduct/SingleProduct"
 
 function App() {
 
@@ -124,9 +121,11 @@ const handleDec = (id)=>{
      <Route path="/" element={<Home/>}/>
      <Route path="/cart" element={<Cart cart={cart} handleDec={handleDec} handleInc={handleInc} handleRemove={handleRemove} getTotalPrice={getTotalPrice} applyPromoCode={applyPromoCode} promoCode={promoCode} setPromoCode={setPromoCode} invalid={invalid}/>}/>
      <Route path="/allproducts" element={<AllProducts AddToCart={AddToCart} />}/>
-     <Route path="/login" element={<Login/>}/>
-     <Route path="/signUp" element={<SignUp/>}/>
 
+     <Route path="/login" element={<Login/>}/>
+     <Route path="/singleProduct/:productId" element={<SingleProduct/>}/>
+
+     <Route path="/signUp" element={<SignUp/>}/>
 
      </Routes>
      <Toaster/>

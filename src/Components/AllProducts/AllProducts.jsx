@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import img3 from '../../assets/Gallary/img3.jpg'
+import { Link } from 'react-router-dom'
+
 
 
 
@@ -136,13 +138,15 @@ useEffect(() => {
           {
            allProducts.map((AllItems)=>(
             <div className='border-4' key={AllItems.id}>
+                <Link  to={`/singleProduct/${AllItems.id}`}>
                 <img src={AllItems.thumbnail} alt="" />
+                </Link>
 
               <p>{AllItems.title}</p>
               <p>{AllItems.price}</p>
               <p>{AllItems.rating}</p>
 
-              <button className=' bg-blue-500  ' onClick={()=>AddToCart(AllItems)}>
+              <button className=' bg-blue-500' onClick={()=>AddToCart(AllItems)}>
                Add to cart 
               </button>
             </div>
